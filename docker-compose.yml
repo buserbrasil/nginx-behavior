@@ -1,0 +1,7 @@
+services:
+  nginx:
+    image: docker.io/nginx:stable
+    volumes:
+      - ./conf.d:/etc/nginx/conf.d
+    ports:
+      - "8080:80"
