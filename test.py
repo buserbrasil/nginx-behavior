@@ -54,7 +54,7 @@ def test_nginx_respects_cache_control_prefer_s_maxage():
     assert response.headers['X-Cache-Status'] == 'HIT'
 
 
-def test_nginx_respects_cache_control_prefer_s_maxage():
+def test_nginx_respects_cache_control_prefer_s_maxage_zero():
     path = '/response-headers'
     params = {
         'Cache-Control': 'max-age=10 s-maxage=0',
