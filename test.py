@@ -1,10 +1,27 @@
+from contextvars import ContextVar
+import uuid
+
+import pytest
 import requests
 
 BASE_URL = 'http://localhost:8080'
+cache_key = ContextVar('cache_key')
+
+
+@pytest.fixture(autouse=True)
+def nginx_cache_clean():
+    value = str(uuid.uuid4())
+    token = cache_key.set(value)
+    yield
+    cache_key.reset(token)
 
 
 def _get(path, params=None, *, cookies=None):
-    return requests.get(f'{BASE_URL}{path}', params=params, cookies=cookies)
+    headers = {
+        'X-Cache-Key': cache_key.get(),
+    }
+    return requests.get(
+        f'{BASE_URL}{path}', params=params, cookies=cookies, headers=headers)
 
 
 def assert_miss(response):
