@@ -158,3 +158,16 @@ def test_nginx_never_cache_with_set_cookie_in_response():
 
     response = _get(path, params, cookies=cookies)
     assert_miss(response)
+
+
+def test_nginx_cache_control_private_never_cache():
+    path = '/response-headers'
+    params = {
+        'Cache-Control': 'private, max-age=10',
+    }
+
+    response = _get(path, params)
+    assert_miss(response)
+
+    response = _get(path, params)
+    assert_miss(response)
